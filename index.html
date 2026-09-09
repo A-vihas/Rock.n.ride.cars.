@@ -1,152 +1,620 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
-  <link rel="stylesheet" href="./style.css">
+<title>Rock'n Ride Cars</title>
 
-  <link rel="modulepreload" href="./assets/layout-segment-context-C8L0Ad8T.js">
-  <link rel="modulepreload" href="./assets/rolldown-runtime-S-ySWqyJ.js">
-  <link rel="modulepreload" href="./assets/index-2j31kz5r.js">
-  <link rel="modulepreload" href="./assets/framework-CXnKph_e.js">
-  <link rel="modulepreload" href="./assets/page-BLge-e2k.js">
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
 
-  <title>Rock'n Ride Cars</title>
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#05080c;
+  color:white;
+  font-family:Arial,Helvetica,sans-serif;
+  touch-action:none;
+}
 
-  <meta
-    name="description"
-    content="A high-speed 3D car simulator for mobile and computer, with local multiplayer, gears, nitro and multiple cameras."
-  >
+#game{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  background:#081018;
+}
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+.ui{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+}
+
+button{
+  font:inherit;
+  color:white;
+  border:0;
+  cursor:pointer;
+  touch-action:manipulation;
+}
+
+#hud{
+  position:absolute;
+  top:12px;
+  left:12px;
+  right:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  pointer-events:none;
+}
+
+.brand{
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:2px;
+  text-shadow:0 2px 12px #000;
+}
+
+.brand span{
+  color:#fff;
+}
+
+.brand b{
+  color:#38f7c0;
+}
+
+.stats{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.stat{
+  min-width:70px;
+  padding:7px 10px;
+  border:1px solid #ffffff22;
+  border-radius:10px;
+  background:#05080ccc;
+  backdrop-filter:blur(8px);
+  text-align:center;
+}
+
+.stat small{
+  display:block;
+  color:#9aa5b1;
+  font-size:9px;
+  font-weight:bold;
+}
+
+.stat strong{
+  display:block;
+  margin-top:2px;
+  font-size:16px;
+}
+
+#pause{
+  position:absolute;
+  top:75px;
+  right:12px;
+  width:44px;
+  height:44px;
+  border-radius:12px;
+  background:#111a22dd;
+  border:1px solid #ffffff33;
+  font-size:20px;
+  pointer-events:auto;
+}
+
+#mission{
+  position:absolute;
+  top:72px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:9px 16px;
+  border-radius:999px;
+  background:#05080cbb;
+  border:1px solid #ffffff22;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.5px;
+  white-space:nowrap;
+  text-align:center;
+}
+
+#start{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:
+    radial-gradient(circle at 50% 35%,#143c54aa 0,#05080c55 35%,#05080cee 100%);
+  pointer-events:auto;
+}
+
+.menu{
+  width:min(560px,94vw);
+  padding:28px;
+  border-radius:26px;
+  border:1px solid #ffffff20;
+  background:#071019eF;
+  box-shadow:
+    0 30px 100px #000,
+    inset 0 1px #ffffff12;
+  backdrop-filter:blur(18px);
+}
+
+.eyebrow{
+  margin:0 0 8px;
+  color:#38f7c0;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+
+h1{
+  margin:0;
+  font-size:clamp(38px,8vw,68px);
+  line-height:.9;
+  letter-spacing:-3px;
+}
+
+h1 em{
+  color:#38f7c0;
+  font-style:normal;
+}
+
+.intro{
+  color:#aeb8c2;
+  line-height:1.5;
+  font-size:14px;
+  margin:18px 0 22px;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:12px;
+}
+
+.setting{
+  padding:12px;
+  border-radius:15px;
+  background:#ffffff08;
+  border:1px solid #ffffff12;
+}
+
+.setting label{
+  display:block;
+  color:#87929e;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:1.5px;
+  margin-bottom:8px;
+}
+
+.segmented{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:5px;
+}
+
+.segmented button{
+  padding:10px 5px;
+  border-radius:9px;
+  background:#ffffff0b;
+  color:#9aa5b1;
+}
+
+.segmented button.active{
+  color:#06110e;
+  background:#38f7c0;
+  font-weight:900;
+}
+
+.paint{
+  display:flex;
+  gap:10px;
+}
+
+.paint button{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  border:3px solid transparent;
+  box-shadow:0 2px 12px #000;
+}
+
+.paint button.selected{
+  border-color:white;
+  transform:scale(1.12);
+}
+
+#startBtn{
+  width:100%;
+  margin-top:14px;
+  padding:17px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#38f7c0,#20b996);
+  color:#03110d;
+  font-size:17px;
+  font-weight:1000;
+  letter-spacing:1px;
+  box-shadow:0 12px 35px #38f7c044;
+}
+
+#startBtn:active{
+  transform:scale(.98);
+}
+
+.help{
+  margin-top:15px;
+  color:#75818c;
+  text-align:center;
+  font-size:10px;
+  line-height:1.6;
+}
+
+.hidden{
+  display:none !important;
+}
+
+#touch{
+  position:absolute;
+  inset:auto 0 0 0;
+  height:145px;
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  padding:15px;
+  pointer-events:none;
+}
+
+.touch-side{
+  display:flex;
+  gap:10px;
+  pointer-events:auto;
+}
+
+.touch-btn{
+  width:62px;
+  height:62px;
+  border-radius:18px;
+  background:#071019bb;
+  border:1px solid #ffffff28;
+  box-shadow:0 8px 25px #0008;
+  font-size:22px;
+  user-select:none;
+}
+
+.touch-btn:active{
+  background:#38f7c055;
+  transform:scale(.94);
+}
+
+.nitro{
+  width:82px;
+  font-size:13px;
+  font-weight:900;
+}
+
+#nitroBar{
+  position:absolute;
+  left:15px;
+  bottom:158px;
+  width:160px;
+  height:7px;
+  border-radius:10px;
+  background:#0009;
+  overflow:hidden;
+}
+
+#nitroFill{
+  width:100%;
+  height:100%;
+  background:#38f7c0;
+}
+
+@media(max-width:600px){
+  .menu{
+    padding:22px;
+  }
+
+  .row{
+    grid-template-columns:1fr;
+  }
+
+  .stats .stat:nth-child(1){
+    display:none;
+  }
+
+  #mission{
+    top:70px;
+    max-width:75vw;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+}
+
+@media(min-width:900px){
+  #touch{
+    opacity:.45;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <main class="game-shell">
+<canvas id="game"></canvas>
 
-    <div
-      class="game-canvas"
-      aria-label="3D night city racing game">
-      <canvas
-        data-engine="three.js r185">
-      </canvas>
+<div class="ui">
+
+  <div id="hud">
+
+    <div class="brand">
+      <span>ROCK'N RIDE</span> <b>CARS</b>
     </div>
 
-    <header class="topbar">
-      <div class="brand">
-        <span>ROCK'N RIDE</span> <b>CARS</b>
+    <div class="stats">
+
+      <div class="stat">
+        <small>SPEED</small>
+        <strong><span id="speed">0</span> KM/H</strong>
       </div>
 
-      <div class="live-pill">
-        <i></i> LOCAL RACE
+      <div class="stat">
+        <small>LIMIT</small>
+        <strong><span id="limit">60</span></strong>
       </div>
 
-      <div class="top-actions">
-        <button class="icon-button" aria-label="Fullscreen">
-          ⛶
-        </button>
-
-        <button class="icon-button" aria-label="Pause">
-          Ⅱ
-        </button>
+      <div class="stat">
+        <small>POLICE</small>
+        <strong id="wanted">0</strong>
       </div>
-    </header>
 
-    <section class="menu-card">
+    </div>
 
-      <p class="eyebrow">
-        NO DOWNLOAD • INSTANT RACING
-      </p>
+  </div>
+
+  <div id="mission">
+    READY • 15 CARS • 15 RAMPS
+  </div>
+
+  <button id="pause">Ⅱ</button>
+
+  <div id="nitroBar">
+    <div id="nitroFill"></div>
+  </div>
+
+  <div id="start">
+
+    <div class="menu">
+
+      <p class="eyebrow">NO DOWNLOAD • INSTANT RACING</p>
 
       <h1>
         OWN THE <em>NIGHT</em>
       </h1>
 
       <p class="intro">
-        High-speed 3D street racing for mobile and computer.
-        Race rivals, hit checkpoints, shift gears and burn nitro.
+        High-speed street racing with ramps, traffic,
+        police and nitro. Built to work on phones,
+        tablets and computers.
       </p>
 
-      <div class="setup-grid">
+      <div class="row">
 
         <div class="setting">
           <label>RACE MODE</label>
 
           <div class="segmented">
-            <button class="active">SOLO</button>
-            <button>2 PLAYERS</button>
+            <button class="active" type="button">SOLO</button>
+            <button type="button">2 PLAYERS</button>
           </div>
+
         </div>
 
         <div class="setting">
           <label>TRANSMISSION</label>
 
           <div class="segmented">
-            <button class="active">AUTO</button>
-            <button>MANUAL</button>
+            <button class="active" type="button">AUTO</button>
+            <button type="button">MANUAL</button>
           </div>
-        </div>
 
-        <div class="setting paint-setting">
-          <label>CAR PAINT</label>
-
-          <div class="paint-row">
-            <button
-              aria-label="Choose #ff3b30 car"
-              class="selected"
-              style="background:#ff3b30">
-            </button>
-
-            <button
-              aria-label="Choose #38f7c0 car"
-              style="background:#38f7c0">
-            </button>
-
-            <button
-              aria-label="Choose #2c7cff car"
-              style="background:#2c7cff">
-            </button>
-
-            <button
-              aria-label="Choose #ffbf35 car"
-              style="background:#ffbf35">
-            </button>
-
-            <button
-              aria-label="Choose #f7f7fb car"
-              style="background:#f7f7fb">
-            </button>
-          </div>
         </div>
 
       </div>
 
-      <button class="start-button">
-        START ENGINE<span>›</span>
+      <div class="setting">
+
+        <label>CAR PAINT</label>
+
+        <div class="paint">
+
+          <button
+            type="button"
+            class="selected"
+            data-color="#f2f4f5"
+            style="background:#f2f4f5">
+          </button>
+
+          <button
+            type="button"
+            data-color="#ff3b30"
+            style="background:#ff3b30">
+          </button>
+
+          <button
+            type="button"
+            data-color="#38f7c0"
+            style="background:#38f7c0">
+          </button>
+
+          <button
+            type="button"
+            data-color="#2c7cff"
+            style="background:#2c7cff">
+          </button>
+
+          <button
+            type="button"
+            data-color="#ffbf35"
+            style="background:#ffbf35">
+          </button>
+
+        </div>
+
+      </div>
+
+      <button id="startBtn" type="button">
+        START ENGINE&nbsp; ›
       </button>
 
-      <div class="controls-help">
-        <p>
-          <b>P1</b>
-          W/S accelerate &amp; brake • A/D steer • Shift nitro
-        </p>
-
-        <p>
-          C camera • Automatic gears • Esc pause
-        </p>
+      <div class="help">
+        W / ↑ = ACCELERATE &nbsp; • &nbsp;
+        S / ↓ = BRAKE &nbsp; • &nbsp;
+        A / D = STEER<br>
+        SPACE = NITRO &nbsp; • &nbsp;
+        P = PAUSE
       </div>
 
-    </section>
+    </div>
 
-    <div class="scanlines"></div>
+  </div>
 
-  </main>
+  <div id="touch">
 
-  <script type="module">
-    import "./assets/index-2j31kz5r.js";
-  </script>
+    <div class="touch-side">
+
+      <button
+        class="touch-btn"
+        data-key="left"
+        type="button">
+        ◀
+      </button>
+
+      <button
+        class="touch-btn"
+        data-key="right"
+        type="button">
+        ▶
+      </button>
+
+    </div>
+
+    <div class="touch-side">
+
+      <button
+        class="touch-btn"
+        data-key="brake"
+        type="button">
+        ▼
+      </button>
+
+      <button
+        class="touch-btn"
+        data-key="gas"
+        type="button">
+        ▲
+      </button>
+
+      <button
+        class="touch-btn nitro"
+        data-key="nitro"
+        type="button">
+        NITRO
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Compatibility elements used by game.js -->
+<div id="audioPanel" class="hidden"></div>
+
+<input
+  id="audioFiles"
+  type="file"
+  accept="audio/*"
+  class="hidden">
+
+<audio id="player"></audio>
+<span id="trackName" class="hidden"></span>
+
+<button
+  id="daynight"
+  class="hidden"
+  type="button">
+</button>
+
+<button
+  id="music"
+  class="hidden"
+  type="button">
+</button>
+
+<button
+  id="spotify"
+  class="hidden"
+  type="button">
+</button>
+
+<script>
+/* Menu controls */
+document.querySelectorAll(".segmented button").forEach(button => {
+  button.addEventListener("click", () => {
+    button.parentElement
+      .querySelectorAll("button")
+      .forEach(b => b.classList.remove("active"));
+
+    button.classList.add("active");
+  });
+});
+
+/* Paint selection */
+document.querySelectorAll(".paint button").forEach(button => {
+  button.addEventListener("click", () => {
+    document
+      .querySelectorAll(".paint button")
+      .forEach(b => b.classList.remove("selected"));
+
+    button.classList.add("selected");
+  });
+});
+
+/* Nitro display */
+setInterval(() => {
+  const fill = document.getElementById("nitroFill");
+
+  if (window.player && typeof window.player.nitro === "number") {
+    fill.style.width =
+      Math.max(0, Math.min(100, window.player.nitro)) + "%";
+  }
+}, 50);
+
+/* Make sure the canvas receives the correct touch behavior */
+document.getElementById("game").style.touchAction = "none";
+</script>
+
+<!-- THIS IS THE ACTUAL GAME ENGINE -->
+<script src="./game.js"></script>
 
 </body>
 </html>
