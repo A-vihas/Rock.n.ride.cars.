@@ -1,72 +1,153 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Rock'n Ride Cars</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
-
 html,body{
   margin:0;
   width:100%;
   height:100%;
   overflow:hidden;
-  background:#05080c;
-  color:white;
-  font-family:Arial,Helvetica,sans-serif;
+  background:#081018;
   touch-action:none;
+  font-family:Arial,sans-serif;
 }
-
 #game{
   position:fixed;
   inset:0;
   width:100%;
   height:100%;
-  display:block;
-  background:#081018;
 }
-
-.ui{
+#start{
   position:fixed;
   inset:0;
-  pointer-events:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#061019dd;
+  z-index:10;
 }
-
-button{
-  font:inherit;
+#start.hidden{display:none}
+.menu{
+  width:min(500px,88vw);
+  padding:28px;
+  border-radius:24px;
+  background:#071019ee;
   color:white;
+  text-align:center;
+  box-shadow:0 20px 80px #000;
+}
+h1{font-size:42px;margin:5px 0 12px}
+h1 span{color:#38f7c0}
+p{color:#aab5bf}
+#startBtn{
+  width:100%;
+  padding:18px;
   border:0;
+  border-radius:14px;
+  background:#38f7c0;
+  color:#03100c;
+  font-size:18px;
+  font-weight:900;
   cursor:pointer;
   touch-action:manipulation;
 }
-
-#hud{
-  position:absolute;
-  top:12px;
-  left:12px;
-  right:12px;
+#pause{
+  position:fixed;
+  right:15px;
+  top:15px;
+  z-index:20;
+  padding:12px 16px;
+  border:0;
+  border-radius:12px;
+  background:#071019dd;
+  color:white;
+  font-size:20px;
+}
+#mission,#speed,#limit,#wanted{
+  position:fixed;
+  z-index:20;
+  color:white;
+  font-weight:bold;
+}
+#mission{top:18px;left:18px}
+#speed{bottom:20px;left:20px}
+#limit{bottom:45px;left:20px}
+#wanted{top:55px;left:20px}
+#touch{
+  position:fixed;
+  z-index:30;
+  left:0;
+  right:0;
+  bottom:10px;
   display:flex;
   justify-content:space-between;
-  align-items:flex-start;
+  padding:12px;
   pointer-events:none;
 }
-
-.brand{
-  font-size:18px;
-  font-weight:900;
-  letter-spacing:2px;
-  text-shadow:0 2px 12px #000;
+#touch button{
+  pointer-events:auto;
+  width:64px;
+  height:64px;
+  margin:4px;
+  border:1px solid #ffffff44;
+  border-radius:18px;
+  background:#071019cc;
+  color:white;
+  font-size:22px;
+  touch-action:none;
 }
+</style>
+</head>
 
-.brand span{
-  color:#fff;
+<body>
+
+<canvas id="game"></canvas>
+
+<div id="mission">READY • 15 CARS • 15 RAMPS</div>
+<div id="speed">0 KM/H</div>
+<div id="limit">LIMIT 60</div>
+<div id="wanted">POLICE 0</div>
+
+<button id="pause">Ⅱ</button>
+
+<div id="start">
+  <div class="menu">
+    <h1>ROCK'N <span>RIDE</span></h1>
+    <p>15 cars • 15 ramps • police • nitro</p>
+    <button id="startBtn" type="button">START ENGINE ›</button>
+  </div>
+</div>
+
+<div id="touch">
+  <div>
+    <button data-key="left">◀</button>
+    <button data-key="right">▶</button>
+  </div>
+  <div>
+    <button data-key="brake">▼</button>
+    <button data-key="gas">▲</button>
+    <button data-key="nitro">NITRO</button>
+  </div>
+</div>
+
+<div id="audioPanel" class="hidden"></div>
+<input id="audioFiles" type="file" accept="audio/*" style="display:none">
+<audio id="player"></audio>
+<span id="trackName"></span>
+<button id="daynight" style="display:none"></button>
+<button id="music" style="display:none"></button>
+<button id="spotify" style="display:none"></button>
+
+<script src="./game.js"></script>
+
+</body>
+</html>
+```
 }
 
 .brand b{
